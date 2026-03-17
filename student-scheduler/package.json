@@ -1,0 +1,11 @@
+{
+  "name": "edusync-student-scheduler",
+  "version": "1.0.0",
+  "description": "Student Schedule Manager with WhatsApp Notifications via N8N",
+  "scripts": {
+    "install-all": "cd backend && npm install",
+    "start": "cd backend && node server.js",
+    "dev": "cd backend && npx nodemon server.js",
+    "setup": "cd backend && npm install && node -e \"require('./db/init')\" && echo 'Setup complete!'"
+  }
+}

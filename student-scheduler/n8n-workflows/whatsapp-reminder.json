@@ -1,0 +1,89 @@
+{
+  "name": "EduSync — WhatsApp Class Reminder",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "edusync-reminder",
+        "responseMode": "onReceived",
+        "responseData": "allEntries"
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "sendMessage",
+        "from": "whatsapp:+14155238886",
+        "to": "={{ \"whatsapp:\" + $json.body.student.phone }}",
+        "body": "={{ $json.body.message }}"
+      },
+      "name": "Send WhatsApp via Twilio",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [500, 300],
+      "credentials": {
+        "twilioApi": {
+          "name": "Twilio API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "status",
+              "value": "sent"
+            },
+            {
+              "name": "to",
+              "value": "={{ $json.body.student.phone }}"
+            },
+            {
+              "name": "class",
+              "value": "={{ $json.body.class.subject }}"
+            }
+          ]
+        }
+      },
+      "name": "Set Response",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [750, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp via Twilio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WhatsApp via Twilio": {
+      "main": [
+        [
+          {
+            "node": "Set Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": ["edusync", "whatsapp", "education"],
+  "_comment": "SETUP: 1) Import this into N8N, 2) Add Twilio credentials, 3) Activate workflow, 4) Copy webhook URL, 5) Paste in EduSync > N8N Setup tab"
+}

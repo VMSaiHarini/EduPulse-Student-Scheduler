@@ -1,0 +1,68 @@
+{
+  "name": "EduPulse - Student Class Reminder",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "class-reminder",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "a1b2c3d4-webhook",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [{ "value1": "={{$json.type}}", "value2": "class_reminder" }]
+        }
+      },
+      "id": "a1b2c3d4-if",
+      "name": "Is Class Reminder?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "whatsapp:+14155238886",
+        "to": "=whatsapp:{{$json.whatsapp_number}}",
+        "body": "={{$json.message}}"
+      },
+      "id": "a1b2c3d4-twilio",
+      "name": "Send WhatsApp (Twilio)",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [680, 220],
+      "credentials": { "twilioApi": { "id": "1", "name": "Twilio Credentials" } }
+    },
+    {
+      "parameters": {
+        "values": { "string": [{ "name": "status", "value": "sent" }, { "name": "to", "value": "={{$node['Webhook'].json.whatsapp_number}}" }] },
+        "options": {}
+      },
+      "id": "a1b2c3d4-respond",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Is Class Reminder?", "type": "main", "index": 0 }]] },
+    "Is Class Reminder?": {
+      "main": [
+        [{ "node": "Send WhatsApp (Twilio)", "type": "main", "index": 0 }],
+        [{ "node": "Respond OK", "type": "main", "index": 0 }]
+      ]
+    },
+    "Send WhatsApp (Twilio)": { "main": [[{ "node": "Respond OK", "type": "main", "index": 0 }]] }
+  },
+  "active": true,
+  "settings": { "executionOrder": "v1" }
+}

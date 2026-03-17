@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduPulse — Smart Student Scheduler</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Auth Screen -->
+  <div id="auth-screen" class="screen active">
+    <div class="auth-bg">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+      <div class="grid-overlay"></div>
+    </div>
+    <div class="auth-container">
+      <div class="auth-brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="20" fill="url(#bg)"/><path d="M10 28l10-16 10 16H10z" fill="white" opacity="0.9"/><circle cx="20" cy="14" r="3" fill="white"/><defs><linearGradient id="bg" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+        </div>
+        <span class="brand-name">EduPulse</span>
+      </div>
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-tab="login">Sign In</button>
+          <button class="auth-tab" data-tab="register">Create Account</button>
+        </div>
+        <form id="login-form" class="auth-form active">
+          <h2>Welcome back</h2>
+          <p class="auth-subtitle">Sign in to your smart scheduler</p>
+          <div class="field-group">
+            <label>Email</label>
+            <input type="email" id="login-email" placeholder="you@school.edu" required>
+          </div>
+          <div class="field-group">
+            <label>Password</label>
+            <input type="password" id="login-password" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn-primary">Sign In <span class="btn-arrow">→</span></button>
+          <div id="login-error" class="form-error"></div>
+        </form>
+        <form id="register-form" class="auth-form">
+          <h2>Start learning smarter</h2>
+          <p class="auth-subtitle">Create your free account</p>
+          <div class="field-group">
+            <label>Full Name</label>
+            <input type="text" id="reg-name" placeholder="Arjun Sharma" required>
+          </div>
+          <div class="field-group">
+            <label>Email</label>
+            <input type="email" id="reg-email" placeholder="you@school.edu" required>
+          </div>
+          <div class="field-group">
+            <label>WhatsApp Number</label>
+            <input type="tel" id="reg-whatsapp" placeholder="+91 9876543210">
+          </div>
+          <div class="field-group">
+            <label>Password</label>
+            <input type="password" id="reg-password" placeholder="min 6 characters" required>
+          </div>
+          <button type="submit" class="btn-primary">Create Account <span class="btn-arrow">→</span></button>
+          <div id="register-error" class="form-error"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app-screen" class="screen">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <svg viewBox="0 0 40 40" fill="none" width="32"><circle cx="20" cy="20" r="20" fill="url(#bg2)"/><path d="M10 28l10-16 10 16H10z" fill="white" opacity="0.9"/><circle cx="20" cy="14" r="3" fill="white"/><defs><linearGradient id="bg2" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+          <span>EduPulse</span>
+        </div>
+        <button class="sidebar-close" id="sidebar-close">✕</button>
+      </div>
+      <div class="user-card">
+        <div class="user-avatar" id="nav-avatar">A</div>
+        <div class="user-info">
+          <div class="user-name" id="nav-name">Student</div>
+          <div class="user-role">Student</div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-page="dashboard">
+          <span class="nav-icon">⚡</span> Dashboard
+        </a>
+        <a href="#" class="nav-item" data-page="schedule">
+          <span class="nav-icon">📅</span> My Schedule
+        </a>
+        <a href="#" class="nav-item" data-page="subjects">
+          <span class="nav-icon">📚</span> Subjects
+        </a>
+        <a href="#" class="nav-item" data-page="notifications">
+          <span class="nav-icon">🔔</span> Notifications
+        </a>
+        <a href="#" class="nav-item" data-page="voice">
+          <span class="nav-icon">🎤</span> Voice Assistant
+        </a>
+        <a href="#" class="nav-item" data-page="n8n-guide">
+          <span class="nav-icon">⚙️</span> N8N Setup
+        </a>
+        <a href="#" class="nav-item" data-page="settings">
+          <span class="nav-icon">⚙️</span> Settings
+        </a>
+      </nav>
+      <button class="btn-logout" id="btn-logout">Sign Out</button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="top-bar">
+        <button class="menu-btn" id="menu-btn">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="page-title" id="page-title">Dashboard</div>
+        <div class="top-bar-actions">
+          <button class="icon-btn" id="voice-quick-btn" title="Voice Command">🎤</button>
+          <div class="notification-badge" id="notif-count"></div>
+          <div class="top-avatar" id="top-avatar">A</div>
+        </div>
+      </header>
+
+      <!-- Dashboard Page -->
+      <section class="page active" id="page-dashboard">
+        <div class="page-hero">
+          <div class="hero-text">
+            <h1 id="greeting-text">Good Morning! 👋</h1>
+            <p id="date-text">Loading...</p>
+          </div>
+          <div class="hero-badge" id="today-count-badge">0 classes today</div>
+        </div>
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card" style="--accent:#6C63FF">
+            <div class="stat-icon">📚</div>
+            <div class="stat-value" id="stat-subjects">0</div>
+            <div class="stat-label">Subjects</div>
+          </div>
+          <div class="stat-card" style="--accent:#43D9A2">
+            <div class="stat-icon">📅</div>
+            <div class="stat-value" id="stat-schedules">0</div>
+            <div class="stat-label">Classes/Week</div>
+          </div>
+          <div class="stat-card" style="--accent:#FF9F43">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-value" id="stat-today">0</div>
+            <div class="stat-label">Today's Classes</div>
+          </div>
+          <div class="stat-card" style="--accent:#FF6584">
+            <div class="stat-icon">🔔</div>
+            <div class="stat-value" id="stat-notifs">0</div>
+            <div class="stat-label">Notifs Sent</div>
+          </div>
+        </div>
+        <div class="today-section">
+          <h2 class="section-title">Today's Classes <span class="day-badge" id="today-day"></span></h2>
+          <div id="today-schedule" class="today-list"></div>
+        </div>
+      </section>
+
+      <!-- Schedule Page -->
+      <section class="page" id="page-schedule">
+        <div class="page-header-row">
+          <h2 class="page-h2">Weekly Schedule</h2>
+          <button class="btn-accent" id="btn-add-schedule">+ Add Class</button>
+        </div>
+        <div class="week-tabs" id="week-tabs">
+          <button class="week-tab" data-day="Monday">Mon</button>
+          <button class="week-tab" data-day="Tuesday">Tue</button>
+          <button class="week-tab" data-day="Wednesday">Wed</button>
+          <button class="week-tab" data-day="Thursday">Thu</button>
+          <button class="week-tab" data-day="Friday">Fri</button>
+          <button class="week-tab" data-day="Saturday">Sat</button>
+          <button class="week-tab" data-day="Sunday">Sun</button>
+        </div>
+        <div id="schedule-list" class="schedule-list"></div>
+      </section>
+
+      <!-- Subjects Page -->
+      <section class="page" id="page-subjects">
+        <div class="page-header-row">
+          <h2 class="page-h2">My Subjects</h2>
+          <button class="btn-accent" id="btn-add-subject">+ Add Subject</button>
+        </div>
+        <div id="subjects-grid" class="subjects-grid"></div>
+      </section>
+
+      <!-- Notifications Page -->
+      <section class="page" id="page-notifications">
+        <h2 class="page-h2">Notification History</h2>
+        <div id="notif-list" class="notif-list"></div>
+      </section>
+
+      <!-- Voice Page -->
+      <section class="page" id="page-voice">
+        <h2 class="page-h2">Voice Assistant</h2>
+        <div class="voice-container">
+          <div class="voice-orb-wrapper">
+            <div class="voice-orb" id="voice-orb">
+              <div class="orb-ring r1"></div>
+              <div class="orb-ring r2"></div>
+              <div class="orb-ring r3"></div>
+              <div class="orb-inner">
+                <span class="mic-icon" id="mic-icon">🎤</span>
+              </div>
+            </div>
+          </div>
+          <div class="voice-status" id="voice-status">Tap the microphone to speak</div>
+          <div class="voice-transcript" id="voice-transcript"></div>
+          <div class="voice-response" id="voice-response"></div>
+          <div class="voice-commands">
+            <h3>Example Commands</h3>
+            <div class="cmd-grid">
+              <div class="cmd-chip" onclick="fillVoiceText('What classes do I have today?')">📅 Today's classes</div>
+              <div class="cmd-chip" onclick="fillVoiceText('Add maths class on Monday at 4pm')">➕ Add a class</div>
+              <div class="cmd-chip" onclick="fillVoiceText('What is my next class?')">⏰ Next class</div>
+              <div class="cmd-chip" onclick="fillVoiceText('Read my schedule for this week')">📖 Weekly schedule</div>
+            </div>
+          </div>
+          <div class="tts-section">
+            <h3>Text to Speech</h3>
+            <textarea id="tts-text" placeholder="Type text to convert to speech..." rows="3"></textarea>
+            <div class="tts-controls">
+              <select id="tts-voice">
+                <option value="">Default Voice</option>
+              </select>
+              <input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1">
+              <span id="tts-rate-label">1x</span>
+              <button class="btn-accent" onclick="speakText()">🔊 Speak</button>
+              <button class="btn-secondary" onclick="stopSpeech()">⏹ Stop</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- N8N Guide Page -->
+      <section class="page" id="page-n8n-guide">
+        <h2 class="page-h2">N8N Integration Guide</h2>
+        <div class="guide-container">
+          <div class="guide-hero">
+            <div class="guide-hero-icon">⚙️</div>
+            <h3>Connect WhatsApp Notifications via N8N</h3>
+            <p>Follow these steps to set up automated WhatsApp messages for class reminders</p>
+          </div>
+          <div class="steps-timeline">
+            <div class="step-card">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <h4>Install N8N</h4>
+                <p>Run N8N locally or use N8N cloud. For local install:</p>
+                <code class="code-block">npm install -g n8n<br>n8n start</code>
+                <p>Or use Docker:</p>
+                <code class="code-block">docker run -it --rm --name n8n -p 5678:5678 -v ~/.n8n:/home/node/.n8n n8nio/n8n</code>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <h4>Create a New Workflow</h4>
+                <p>Open N8N at <strong>http://localhost:5678</strong> → Click <strong>"New Workflow"</strong></p>
+                <p>Name it: <em>"Student Class Reminder"</em></p>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <h4>Add Webhook Trigger Node</h4>
+                <p>Search for <strong>"Webhook"</strong> node → Add it → Set:</p>
+                <ul>
+                  <li>HTTP Method: <strong>POST</strong></li>
+                  <li>Path: <strong>class-reminder</strong></li>
+                  <li>Authentication: <strong>None</strong> (or Header Auth)</li>
+                </ul>
+                <p>Copy the webhook URL — you'll paste it in EduPulse Settings.</p>
+                <code class="code-block">http://localhost:5678/webhook/class-reminder</code>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <h4>Add WhatsApp Node</h4>
+                <p>Search for <strong>"WhatsApp Business Cloud"</strong> or <strong>"Twilio"</strong>:</p>
+                <p><strong>Option A — WhatsApp Business API (Meta):</strong></p>
+                <ul>
+                  <li>Connect your Meta Business Account</li>
+                  <li>Set "To" field: <code>{{ $json.whatsapp_number }}</code></li>
+                  <li>Set "Message": <code>{{ $json.message }}</code></li>
+                </ul>
+                <p><strong>Option B — Twilio WhatsApp:</strong></p>
+                <ul>
+                  <li>Add Twilio credentials</li>
+                  <li>Use "Send Message" node</li>
+                  <li>From: <code>whatsapp:+14155238886</code> (Twilio sandbox)</li>
+                  <li>To: <code>whatsapp:{{ $json.whatsapp_number }}</code></li>
+                  <li>Body: <code>{{ $json.message }}</code></li>
+                </ul>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-num">5</div>
+              <div class="step-body">
+                <h4>The Webhook Payload</h4>
+                <p>EduPulse sends this JSON to your webhook:</p>
+                <code class="code-block">{
+  "student_name": "Arjun Sharma",
+  "whatsapp_number": "+919876543210",
+  "message": "📚 Class Reminder! Maths starts in 5 mins...",
+  "subject": "Mathematics",
+  "start_time": "16:00",
+  "room": "Room 101",
+  "teacher": "Mr. Sharma",
+  "type": "class_reminder"
+}</code>
+              </div>
+            </div>
+            <div class="step-card">
+              <div class="step-num">6</div>
+              <div class="step-body">
+                <h4>Connect to EduPulse</h4>
+                <p>Go to <strong>Settings → Notification Settings</strong> and:</p>
+                <ul>
+                  <li>Paste your N8N webhook URL</li>
+                  <li>Enter your WhatsApp number with country code</li>
+                  <li>Click "Test Notification" to verify</li>
+                </ul>
+                <button class="btn-accent" onclick="navigateTo('settings')">⚙️ Open Settings</button>
+              </div>
+            </div>
+            <div class="step-card success-step">
+              <div class="step-num">✓</div>
+              <div class="step-body">
+                <h4>Done! You're All Set 🎉</h4>
+                <p>EduPulse checks your schedule every minute. When a class is <strong>5 minutes away</strong>, it sends the webhook to N8N, which delivers the WhatsApp message automatically!</p>
+              </div>
+            </div>
+          </div>
+          <div class="workflow-download">
+            <h3>Download N8N Workflow Template</h3>
+            <p>Import this pre-built workflow into N8N (File → Import from JSON):</p>
+            <button class="btn-primary" onclick="downloadN8NWorkflow()">⬇️ Download Workflow JSON</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings Page -->
+      <section class="page" id="page-settings">
+        <h2 class="page-h2">Settings</h2>
+        <div class="settings-grid">
+          <div class="settings-card">
+            <h3>Profile</h3>
+            <div class="field-group">
+              <label>Full Name</label>
+              <input type="text" id="set-name" placeholder="Your name">
+            </div>
+            <div class="field-group">
+              <label>WhatsApp Number</label>
+              <input type="tel" id="set-whatsapp" placeholder="+91 9876543210">
+            </div>
+            <div class="field-group">
+              <label>Avatar Color</label>
+              <input type="color" id="set-color" value="#6C63FF">
+            </div>
+            <button class="btn-accent" id="btn-save-profile">Save Profile</button>
+          </div>
+          <div class="settings-card">
+            <h3>N8N Notification Settings</h3>
+            <div class="field-group">
+              <label>N8N Webhook URL</label>
+              <input type="url" id="set-webhook" placeholder="http://localhost:5678/webhook/class-reminder">
+            </div>
+            <div class="field-group">
+              <label>Default Notify (minutes before)</label>
+              <input type="number" id="set-notify-mins" min="1" max="60" value="5">
+            </div>
+            <div class="field-group">
+              <label>Timezone</label>
+              <select id="set-timezone">
+                <option value="Asia/Kolkata">India (IST)</option>
+                <option value="Asia/Dubai">Dubai (GST)</option>
+                <option value="America/New_York">New York (EST)</option>
+                <option value="Europe/London">London (GMT)</option>
+                <option value="Asia/Singapore">Singapore (SGT)</option>
+              </select>
+            </div>
+            <div class="field-group toggle-row">
+              <label>WhatsApp Notifications</label>
+              <label class="toggle"><input type="checkbox" id="set-wa-enabled" checked><span class="toggle-slider"></span></label>
+            </div>
+            <div class="settings-btn-row">
+              <button class="btn-accent" id="btn-save-notif">Save Settings</button>
+              <button class="btn-secondary" id="btn-test-notif">🧪 Test WhatsApp</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal-overlay" id="modal-overlay">
+    <!-- Add Subject Modal -->
+    <div class="modal" id="modal-subject">
+      <div class="modal-header">
+        <h3 id="modal-subject-title">Add Subject</h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <form id="form-subject">
+        <input type="hidden" id="subject-edit-id">
+        <div class="field-group">
+          <label>Subject Name *</label>
+          <input type="text" id="sub-name" placeholder="Mathematics" required>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>Teacher</label>
+            <input type="text" id="sub-teacher" placeholder="Mr. Sharma">
+          </div>
+          <div class="field-group">
+            <label>Room / Location</label>
+            <input type="text" id="sub-room" placeholder="Room 101">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>Color</label>
+            <input type="color" id="sub-color" value="#6C63FF">
+          </div>
+          <div class="field-group">
+            <label>Icon (emoji)</label>
+            <input type="text" id="sub-icon" placeholder="📐" maxlength="2">
+          </div>
+        </div>
+        <div class="emoji-picker">
+          <span onclick="setSubIcon('📐')">📐</span><span onclick="setSubIcon('📚')">📚</span>
+          <span onclick="setSubIcon('🔬')">🔬</span><span onclick="setSubIcon('🎨')">🎨</span>
+          <span onclick="setSubIcon('💻')">💻</span><span onclick="setSubIcon('🏃')">🏃</span>
+          <span onclick="setSubIcon('🎵')">🎵</span><span onclick="setSubIcon('🌍')">🌍</span>
+          <span onclick="setSubIcon('⚗️')">⚗️</span><span onclick="setSubIcon('📊')">📊</span>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Save Subject</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Add Schedule Modal -->
+    <div class="modal" id="modal-schedule">
+      <div class="modal-header">
+        <h3 id="modal-sched-title">Add Class</h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <form id="form-schedule">
+        <input type="hidden" id="sched-edit-id">
+        <div class="field-group">
+          <label>Subject *</label>
+          <select id="sched-subject" required></select>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>Day *</label>
+            <select id="sched-day" required>
+              <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+              <option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Notify Before</label>
+            <select id="sched-notify">
+              <option value="5">5 minutes</option><option value="10">10 minutes</option>
+              <option value="15">15 minutes</option><option value="30">30 minutes</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>Start Time *</label>
+            <input type="time" id="sched-start" required>
+          </div>
+          <div class="field-group">
+            <label>End Time *</label>
+            <input type="time" id="sched-end" required>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Notes</label>
+          <textarea id="sched-notes" placeholder="Any additional notes..." rows="2"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Save Class</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
